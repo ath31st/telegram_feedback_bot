@@ -42,6 +42,7 @@ specific user. Supports multiple languages (Russian, English).
 - Бот поддерживает несколько языков (русский, английский), язык устанавливается в зависимости от
   локализации пользователя, который оставляет обратную связь.
 
+---
 
 - Collecting user feedback
 - Text formatting with sender info (username, ID, locale)
@@ -90,8 +91,10 @@ included (fat JAR).
 
 ### Инструкция по запуску / How to run
 
-1. Найдите сгенерированный JAR-файл в папке build/libs/feedback_bot-x.x.x-standalone.jar / Locate
-   the generated JAR file in build/libs/feedback_bot-x.x.x-standalone.jar
+1. Найдите сгенерированный JAR-файл в папке build/libs/feedback_bot-x.x.x-standalone.jar или
+   скачайте его [отсюда](https://github.com/ath31st/telegram_feedback_bot/releases) / Locate
+   the generated JAR file in build/libs/feedback_bot-x.x.x-standalone.jar or download it
+   [here](https://github.com/ath31st/telegram_feedback_bot/releases)
 2. Запустите JAR-файл / Run the JAR file:
 
    для linux / for linux:
@@ -109,11 +112,11 @@ included (fat JAR).
 
 Будьте внимательны, что вам нужно определить версию приложения вместо x.x.x
 В FEEDBACK_CHAT_ID вам надо указать ID вашего чата(группы) с администраторами или ID конкретного
-пользователя, который будет принимать фидбек
+пользователя, который будет принимать фидбек.
 
 Beware that you need to define an application version instead of x.x.x
 In FEEDBACK_CHAT_ID you need to specify the ID of your chat(group) with administrators or the ID of
-a specific user who will accept feedback
+a specific user who will accept feedback.
 
 ## Кастомизация / Customization
 
