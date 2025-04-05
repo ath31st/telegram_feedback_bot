@@ -20,6 +20,10 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$classicLogbackVersion")
 }
 
+application {
+    mainClass.set("sidim.doma.ApplicationKt")
+}
+
 kotlin {
     jvmToolchain(17)
 }
