@@ -7,13 +7,14 @@
 
 ## Содержание / Contents
 
-1. [Версия программы](#версия-программы--program-version)
-2. [Введение](#введение--introduction)
-3. [Функционал](#функционал--functionality)
-4. [Установка](#установка--installation)
-5. [Список команд](#список-команд--list-of-supported-commands)
-6. [Версии](#версии--versions)
-7. [Лицензия](#лицензия--license)
+1. [Версия программы / Program version](#версия-программы--program-version)
+2. [Введение / Introduction](#введение--introduction)
+3. [Функционал / Functionality](#функционал--functionality)
+4. [Установка и запуск / Installation and running](#установка-и-запуск--installation-and-running)
+5. [Кастомизация / Customization](#кастомизация--customization)
+6. [Список команд / List of supported commands](#список-команд--list-of-supported-commands)
+7. [Версии / Versions](#версии--versions)
+8. [Лицензия / License](#лицензия--license)
 
 ## Версия программы / Program version
 
@@ -49,7 +50,7 @@ specific user. Supports multiple languages (Russian, English).
 - For group mode: 2-minute timeout for selected admin to respond
 - Russian and English language support (auto-detected by user locale)
 
-## Установка / Installation
+## Установка и запуск / Installation and running
 
 ### Системные требования / System requirements
 
@@ -107,8 +108,18 @@ included (fat JAR).
     ```
 
 Будьте внимательны, что вам нужно определить версию приложения вместо x.x.x
+В FEEDBACK_CHAT_ID вам надо указать ID вашего чата(группы) с администраторами или ID конкретного
+пользователя, который будет принимать фидбек
 
 Beware that you need to define an application version instead of x.x.x
+In FEEDBACK_CHAT_ID you need to specify the ID of your chat(group) with administrators or the ID of
+a specific user who will accept feedback
+
+## Кастомизация / Customization
+
+Вы можете изменить текст сообщений в `src/main/resources/messages_*.properties`
+
+You can modify text messages in `src/main/resources/messages_*.properties`
 
 ## Список команд / List of supported commands:
 
