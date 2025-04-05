@@ -114,6 +114,11 @@ class BotController(feedbackChatId: String, private val messageService: MessageS
                     text,
                     UiUtil.replyKeyboard(userChatId, local)
                 )
+
+                messageService.sendTextMessage(
+                    message.chat.id,
+                    Localization.getText("message.feedback_delivered", local)
+                )
             }
         }
     }
