@@ -1,8 +1,10 @@
 package sidim.doma
 
 import dev.inmo.tgbotapi.bot.TelegramBot
+import dev.inmo.tgbotapi.extensions.api.edit.text.editMessageText
 import dev.inmo.tgbotapi.extensions.api.send.sendTextMessage
 import dev.inmo.tgbotapi.types.IdChatIdentifier
+import dev.inmo.tgbotapi.types.MessageId
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup
 import dev.inmo.tgbotapi.types.message.HTMLParseMode
 import org.slf4j.Logger
@@ -22,6 +24,27 @@ class MessageService(
         } catch (e: Exception) {
             if (e.message?.contains("403") == true) {
                 logger.error("Failed to send message to $chatId: ${e.message}")
+            }
+        }
+    }
+
+    suspend fun editTextMessage(
+        chatId: IdChatIdentifier,
+        messageId: MessageId,
+        text: String,
+        replyMarkup: InlineKeyboardMarkup?
+    ) {
+        try {
+            bot.editMessageText(
+                chatId,
+                messageId,
+                text,
+                parseMode = HTMLParseMode,
+                replyMarkup = replyMarkup
+            )
+        } catch (e: Exception) {
+            if (e.message?.contains("403") == true) {
+                logger.error("Failed to edit message $messageId in chat $chatId: ${e.message}")
             }
         }
     }

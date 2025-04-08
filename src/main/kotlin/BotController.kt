@@ -7,6 +7,7 @@ import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onComman
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onDataCallbackQuery
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onText
 import dev.inmo.tgbotapi.extensions.utils.extensions.raw.from
+import dev.inmo.tgbotapi.extensions.utils.extensions.raw.message
 import dev.inmo.tgbotapi.extensions.utils.extensions.raw.text
 import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.RawChatId
@@ -17,12 +18,14 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeoutOrNull
 import sidim.doma.ui.Localization
 import sidim.doma.ui.UiUtil
+import java.time.format.DateTimeFormatter
 
 class BotController(feedbackChatId: String, private val messageService: MessageService) {
     private val feedbackChatId = ChatId(RawChatId(feedbackChatId.toLong()))
 
     companion object {
         private const val ANSWER_TIMEOUT = 120_000L // 2 minutes
+        private val TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy")
     }
 
 
@@ -84,8 +87,31 @@ class BotController(feedbackChatId: String, private val messageService: MessageS
                     )
                     messageService.sendTextMessage(
                         feedbackChatId,
-                        Localization.getText("message.message_delivered", replyingLocal)
+                        Localization.getText("message.message_delivered", replyingLocal, userChatId)
                     )
+
+                    val replyingUserName = callback.user.username
+                        ?: Localization.getText("message.anonymous", replyingLocal)
+
+                    val currentTime = java.time.LocalDateTime.now().format(TIME_FORMATTER)
+
+                    callback.message?.messageId?.let {
+                        val originalText = callback.message?.text ?: ""
+                        val updatedText = Localization.getText(
+                            "message.answered_by",
+                            replyingLocal,
+                            originalText,
+                            replyingUserName,
+                            currentTime
+                        )
+
+                        messageService.editTextMessage(
+                            feedbackChatId,
+                            it,
+                            updatedText,
+                            replyMarkup = UiUtil.replyKeyboard(userChatId, userLocal)
+                        )
+                    }
                 } else {
                     messageService.sendTextMessage(
                         feedbackChatId,
