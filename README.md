@@ -3,6 +3,7 @@
 ![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Gradle](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white)
 ![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![SonarLint](https://img.shields.io/badge/SonarLint-CB2029?style=for-the-badge&logo=sonarlint&logoColor=white)
 
 ## Содержание / Contents
@@ -11,10 +12,11 @@
 2. [Введение / Introduction](#введение--introduction)
 3. [Функционал / Functionality](#функционал--functionality)
 4. [Установка и запуск / Installation and running](#установка-и-запуск--installation-and-running)
-5. [Кастомизация / Customization](#кастомизация--customization)
-6. [Список команд / List of supported commands](#список-команд--list-of-supported-commands)
-7. [Версии / Versions](#версии--versions)
-8. [Лицензия / License](#лицензия--license)
+5. [Запуск через Docker / Docker Deployment](#запуск-через-docker--docker-deployment)
+6. [Кастомизация / Customization](#кастомизация--customization)
+7. [Список команд / List of supported commands](#список-команд--list-of-supported-commands)
+8. [Версии / Versions](#версии--versions)
+9. [Лицензия / License](#лицензия--license)
 
 ## Версия программы / Program version
 
@@ -117,6 +119,40 @@ included (fat JAR).
 Beware that you need to define an application version instead of x.x.x
 In FEEDBACK_CHAT_ID you need to specify the ID of your chat(group) with administrators or the ID of
 a specific user who will accept feedback.
+
+## Запуск через Docker / Docker Deployment
+
+Далее все команды указаны для Linux / Next commands are for Linux
+
+1. Verify Docker installation / Проверка установки Docker
+
+    ```bash
+    docker --version
+    ```
+2. Быстрый старт / Quick start:
+
+    ```bash
+    docker run -d \
+    -e TELEGRAM_BOT_TOKEN="insert-your-telegram-bot-token-here" \
+    -e FEEDBACK_CHAT_ID="insert-your-feedback-chat-id-here" \
+    --name feedback-bot \
+    ath31st/telegram-feedback-bot:latest
+    ```
+3. Полный старт / Full start:
+
+   a) Создание конфигурационного файла / Create config file
+    ```bash
+    echo "TELEGRAM_BOT_TOKEN=insert-your-telegram-bot-token-here
+    FEEDBACK_CHAT_ID=insert-your-feedback-chat-id-here" > feedback.env
+   ```
+   b) Запуск контейнера / Run container
+    ```bash
+   docker run -d \
+    --env-file feedback.env \
+    --restart unless-stopped \
+    --name feedback-bot \
+    ath31st/telegram-feedback-bot:latest
+    ```
 
 ## Кастомизация / Customization
 
