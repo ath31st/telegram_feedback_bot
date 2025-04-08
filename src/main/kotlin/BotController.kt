@@ -12,11 +12,12 @@ import dev.inmo.tgbotapi.extensions.utils.extensions.raw.text
 import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.RawChatId
 import dev.inmo.tgbotapi.types.chat.CommonUser
+import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.utils.RiskFeature
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeoutOrNull
-import sidim.doma.ui.Localization
+import sidim.doma.ui.Localization.getText
 import sidim.doma.ui.UiUtil
 import java.time.format.DateTimeFormatter
 
@@ -28,44 +29,31 @@ class BotController(feedbackChatId: String, private val messageService: MessageS
         private val TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy")
     }
 
-
     @OptIn(RiskFeature::class)
     suspend fun registerHandlers(context: BehaviourContext) {
         with(context) {
             onCommand("start") { message ->
                 val chatId = message.chat.id
-                val locale = (message.from as CommonUser).languageCode ?: "en"
-                messageService.sendTextMessage(
-                    chatId,
-                    Localization.getText("message.start", locale)
-                )
+                val locale = getUserLocale(message)
+                messageService.sendTextMessage(chatId, getText("message.start", locale))
             }
 
             onCommand("help") { message ->
                 val chatId = message.chat.id
-                val locale = (message.from as CommonUser).languageCode ?: "en"
-                messageService.sendTextMessage(
-                    chatId,
-                    Localization.getText("message.help", locale)
-                )
+                val locale = getUserLocale(message)
+                messageService.sendTextMessage(chatId, getText("message.help", locale))
             }
 
             onDataCallbackQuery(initialFilter = { it.data.startsWith("/reply_to_") }) { callback ->
-                val idAndLocal = callback.data.removePrefix("/reply_to_").split("_")
-                val userChatId = idAndLocal[0].toLong()
-                val userLocal = idAndLocal[1]
+                val (userChatId, userLocal) = parseReplyCallbackData(callback.data)
                 val replyingUserId = callback.user.id
-                val replyingLocal = callback.user.languageCode ?: "en"
+                val replyingLocale = callback.user.languageCode ?: "en"
 
                 bot.answerCallbackQuery(callbackQuery = callback)
 
                 messageService.sendTextMessage(
-                    feedbackChatId,
-                    "${
-                        Localization.getText(
-                            "message.input_answer_for_user",
-                            replyingLocal
-                        )
+                    feedbackChatId, "${
+                        getText("message.input_answer_for_user", replyingLocale)
                     } (ID: $userChatId):"
                 )
 
@@ -79,7 +67,7 @@ class BotController(feedbackChatId: String, private val messageService: MessageS
                     messageService.sendTextMessage(
                         ChatId(RawChatId(userChatId)),
                         "${
-                            Localization.getText(
+                            getText(
                                 "message.answer_from_dev",
                                 userLocal
                             )
@@ -87,19 +75,19 @@ class BotController(feedbackChatId: String, private val messageService: MessageS
                     )
                     messageService.sendTextMessage(
                         feedbackChatId,
-                        Localization.getText("message.message_delivered", replyingLocal, userChatId)
+                        getText("message.message_delivered", replyingLocale, userChatId)
                     )
 
-                    val replyingUserName = callback.user.username
-                        ?: Localization.getText("message.anonymous", replyingLocal)
+                    val replyingUserName =
+                        callback.user.username ?: getText("message.anonymous", replyingLocale)
 
                     val currentTime = java.time.LocalDateTime.now().format(TIME_FORMATTER)
 
                     callback.message?.messageId?.let {
                         val originalText = callback.message?.text ?: ""
-                        val updatedText = Localization.getText(
+                        val updatedText = getText(
                             "message.answered_by",
-                            replyingLocal,
+                            replyingLocale,
                             originalText,
                             replyingUserName,
                             currentTime
@@ -115,7 +103,7 @@ class BotController(feedbackChatId: String, private val messageService: MessageS
                 } else {
                     messageService.sendTextMessage(
                         feedbackChatId,
-                        Localization.getText("message.timeout_reset", replyingLocal, userChatId)
+                        getText("message.timeout_reset", replyingLocale, userChatId)
                     )
                 }
             }
@@ -125,27 +113,42 @@ class BotController(feedbackChatId: String, private val messageService: MessageS
 
                 val userMessage = message.content.text.trim()
                 val userChatId = message.chat.id.chatId.long
-                val user = (message.from as CommonUser)
-                val local = user.languageCode ?: "en"
-                val userName = user.username ?: Localization.getText("message.anonymous", local)
+                val locale = getUserLocale(message)
+                val userName = getUserUsername(message)
                 val text = "📩 ${
-                    Localization.getText(
+                    getText(
                         "message.feedback_from",
-                        local
+                        locale
                     )
-                } $userName (ID: ${userChatId}/${local}):\n${userMessage}"
+                } $userName (ID: ${userChatId}/${locale}):\n${userMessage}"
 
                 messageService.sendTextMessage(
                     feedbackChatId,
                     text,
-                    UiUtil.replyKeyboard(userChatId, local)
+                    UiUtil.replyKeyboard(userChatId, locale)
                 )
 
                 messageService.sendTextMessage(
                     message.chat.id,
-                    Localization.getText("message.feedback_delivered", local)
+                    getText("message.feedback_delivered", locale)
                 )
             }
         }
+    }
+
+    @OptIn(RiskFeature::class)
+    private fun getUserLocale(message: CommonMessage<*>): String =
+        (message.from as CommonUser).languageCode ?: "en"
+
+    @OptIn(RiskFeature::class)
+    private fun getUserUsername(message: CommonMessage<*>): String =
+        message.from?.username?.toString() ?: getText(
+            "message.anonymous",
+            getUserLocale(message)
+        )
+
+    private fun parseReplyCallbackData(data: String): Pair<Long, String> {
+        val (id, locale) = data.removePrefix("/reply_to_").split("_")
+        return id.toLong() to locale
     }
 }
