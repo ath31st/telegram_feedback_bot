@@ -11,12 +11,13 @@
 1. [Версия программы / Program version](#версия-программы--program-version)
 2. [Введение / Introduction](#введение--introduction)
 3. [Функционал / Functionality](#функционал--functionality)
-4. [Установка и запуск / Installation and running](#установка-и-запуск--installation-and-running)
-5. [Запуск через Docker / Docker Deployment](#запуск-через-docker--docker-deployment)
-6. [Кастомизация / Customization](#кастомизация--customization)
-7. [Список команд / List of supported commands](#список-команд--list-of-supported-commands)
-8. [Версии / Versions](#версии--versions)
-9. [Лицензия / License](#лицензия--license)
+4. [Пример использования / Usage example](#пример-использования--usage-example)
+5. [Установка и запуск / Installation and running](#установка-и-запуск--installation-and-running)
+6. [Запуск через Docker / Docker Deployment](#запуск-через-docker--docker-deployment)
+7. [Кастомизация / Customization](#кастомизация--customization)
+8. [Список команд / List of supported commands](#список-команд--list-of-supported-commands)
+9. [Версии / Versions](#версии--versions)
+10. [Лицензия / License](#лицензия--license)
 
 ## Версия программы / Program version
 
@@ -52,6 +53,28 @@ specific user. Supports multiple languages (Russian, English).
 - Delivering responses back to users
 - For group mode: 2-minute timeout for selected admin to respond
 - Russian and English language support (auto-detected by user locale)
+
+## Пример использования / Usage example
+
+- **Отправка обратной связи / Sending feedback**: Пользователь отправляет обратную связь, бот
+  пересылает сообщение в указанный чат. / User sends feedback, the bot forwards the message to the
+  defined chat.
+
+  ![Sending feedback](images/image_00.jpg)
+
+- **Получение обратной связи / Getting feedback**: Сообщение доставляется в указанный чат. / The
+  message is delivered to the defined chat.
+
+  ![Getting feedback](images/image_01.jpg)
+
+- **Процесс ответа на сообщение пользователя / The process of responding to a user's message**:
+
+  ![Response process](images/image_02.jpg)
+
+- **Получение ответа на обратную связь / Getting a response to feedback**: Пользователь получает
+  ответ на свою обратную связь. / User gets a response to their feedback.
+
+  ![Getting a response](images/image_03.jpg)
 
 ## Установка и запуск / Installation and running
 
