@@ -4,11 +4,11 @@ val classicLogbackVersion: String by project
 
 plugins {
     application
-    kotlin("jvm") version "2.1.10"
+    kotlin("jvm") version "2.1.20"
 }
 
 group = "sidim.doma"
-version = "1.1.1"
+version = "1.2.0"
 
 repositories {
     mavenCentral()
@@ -25,7 +25,7 @@ application {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 tasks {

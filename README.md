@@ -21,7 +21,7 @@
 
 ## Версия программы / Program version
 
-1.1.1
+1.2.0
 
 ## Введение / Introduction
 
@@ -191,7 +191,7 @@ You can modify text messages in `src/main/resources/messages_*.properties`
 
 ## Версии / Versions:
 
-- Kotlin: 2.1.10
+- Kotlin: 2.1.20
 - TelegramBotAPI: 24.0.2
 - Gradle: 8.10
 

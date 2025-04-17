@@ -1,6 +1,6 @@
-FROM eclipse-temurin:17-jdk-alpine AS base
+FROM eclipse-temurin:21-jdk-alpine AS base
 
-LABEL version="1.1.1"
+LABEL version="1.2.0"
 LABEL description="Telegram feedback bot"
 
 FROM base AS builder
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 RUN chmod +x ./gradlew && ./gradlew build -x test
 
-FROM eclipse-temurin:17-jre-alpine AS runner
+FROM eclipse-temurin:21-jre-alpine AS runner
 RUN apk --no-cache add dumb-init \
     && mkdir /app \
     && addgroup --system javauser \
