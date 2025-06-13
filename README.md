@@ -21,7 +21,7 @@
 
 ## Версия программы / Program version
 
-1.2.0
+1.2.1
 
 ## Введение / Introduction
 
@@ -80,7 +80,7 @@ specific user. Supports multiple languages (Russian, English).
 
 ### Системные требования / System requirements
 
-- Java 17 (или выше / or higher)
+- Java 21 (или выше / or higher)
 - Gradle 8.10 (опционально / optional)
 
 ### Инструкция по установке / Installation guide
@@ -93,7 +93,7 @@ specific user. Supports multiple languages (Russian, English).
     ```bash
     cd telegram_feedback_bot
     ```
-3. Проверьте версию Java 17+ / Verify Java 17+:
+3. Проверьте версию Java 21+ / Verify Java 21+:
     ```bash
     java -version
     ```
@@ -192,7 +192,7 @@ You can modify text messages in `src/main/resources/messages_*.properties`
 ## Версии / Versions:
 
 - Kotlin: 2.1.20
-- TelegramBotAPI: 24.0.2
+- TelegramBotAPI: 25.0.1
 - Gradle: 8.10
 
 ## Лицензия / License
