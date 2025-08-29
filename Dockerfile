@@ -1,6 +1,6 @@
 FROM eclipse-temurin:21-jdk-alpine AS base
 
-LABEL version="1.2.0"
+LABEL version="1.2.2"
 LABEL description="Telegram feedback bot"
 
 FROM base AS builder
