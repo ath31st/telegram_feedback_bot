@@ -6,21 +6,18 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import sidim.doma.config.configureLogger
+import sidim.doma.config.loadConfig
 
 fun main(): Unit = runBlocking {
     val logger = LoggerFactory.getLogger("Main")
 
     configureLogger()
 
-    val botToken = System.getenv("TELEGRAM_BOT_TOKEN")
-        ?: throw IllegalStateException("Telegram bot token not provided in config or environment")
+    val botConfig = loadConfig()
 
-    val feedbackChatId = System.getenv("FEEDBACK_CHAT_ID")
-        ?: throw IllegalStateException("Feedback chat id not provided in config or environment")
-
-    val bot = telegramBot(botToken)
+    val bot = telegramBot(botConfig.token)
     val messageService = MessageService(bot)
-    val controller = BotController(feedbackChatId, messageService)
+    val controller = BotController(botConfig.feedbackChatId, messageService)
 
     launch {
         try {
