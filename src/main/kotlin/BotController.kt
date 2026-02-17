@@ -137,7 +137,10 @@ class BotController(feedbackChatId: String, private val messageService: MessageS
             }
 
             onContentMessage(initialFilter = {
-                it.text?.startsWith("/") != true && it.content !is TextContent
+                val isCommand = it.text?.startsWith("/") == true
+                val isText = it.content is TextContent?
+
+                !isCommand && !isText
             }) { message ->
                 if (message.chat.id == feedbackChatId) return@onContentMessage
 
