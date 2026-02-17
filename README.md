@@ -33,7 +33,7 @@ specific user. Supports multiple languages (Russian, English).
 
 ## Функционал / Functionality
 
-- Получение обратной связи от пользователей
+- Получение обратной связи от пользователей (включая изображения, видео и другие файлы)
 - Форматирование текста, добавление дополнительной информации об отправителе (юзернейм, ID,
   локализация)
 - Пересылка дополненных сообщений от пользователей в группу администраторов или конкретному
@@ -47,7 +47,7 @@ specific user. Supports multiple languages (Russian, English).
 
 ---
 
-- Collecting user feedback
+- Receiving feedback from users (including images, videos and other files)
 - Text formatting with sender info (username, ID, locale)
 - Forwarding messages to an admin group or specific recipient
 - Delivering responses back to users
@@ -81,7 +81,7 @@ specific user. Supports multiple languages (Russian, English).
 ### Системные требования / System requirements
 
 - Java 21 (или выше / or higher)
-- Gradle 8.10 (опционально / optional)
+- Gradle 9.3.1 (опционально / optional)
 
 ### Инструкция по установке / Installation guide
 
@@ -191,9 +191,9 @@ You can modify text messages in `src/main/resources/messages_*.properties`
 
 ## Версии / Versions:
 
-- Kotlin: 2.1.20
-- TelegramBotAPI: 25.0.1
-- Gradle: 8.10
+- Kotlin: 2.2.20
+- TelegramBotAPI: 30.0.2
+- Gradle: 9.3.1
 
 ## Лицензия / License
 
