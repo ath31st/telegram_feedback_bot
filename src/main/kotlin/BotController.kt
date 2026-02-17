@@ -4,6 +4,7 @@ import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
 import dev.inmo.tgbotapi.extensions.behaviour_builder.BehaviourContext
 import dev.inmo.tgbotapi.extensions.behaviour_builder.expectations.waitContentMessage
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onCommand
+import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onContentMessage
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onDataCallbackQuery
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onText
 import dev.inmo.tgbotapi.extensions.utils.extensions.raw.from
@@ -13,6 +14,7 @@ import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.RawChatId
 import dev.inmo.tgbotapi.types.chat.CommonUser
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
+import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.utils.RiskFeature
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -125,6 +127,37 @@ class BotController(feedbackChatId: String, private val messageService: MessageS
                 messageService.sendTextMessage(
                     feedbackChatId,
                     text,
+                    UiUtil.replyKeyboard(userChatId, locale)
+                )
+
+                messageService.sendTextMessage(
+                    message.chat.id,
+                    getText("message.feedback_delivered", locale)
+                )
+            }
+
+            onContentMessage(initialFilter = {
+                it.text?.startsWith("/") != true && it.content !is TextContent
+            }) { message ->
+                if (message.chat.id == feedbackChatId) return@onContentMessage
+
+                val userChatId = message.chat.id.chatId.long
+                val locale = getUserLocale(message)
+                val userName = getUserUsername(message)
+
+                val headerText = "📩 ${
+                    getText("message.feedback_from", locale)
+                } $userName (ID: ${userChatId}/${locale}):"
+
+                messageService.copyMessage(
+                    fromChatId = message.chat.id,
+                    messageId = message.messageId,
+                    toChatId = feedbackChatId,
+                )
+
+                messageService.sendTextMessage(
+                    feedbackChatId,
+                    headerText,
                     UiUtil.replyKeyboard(userChatId, locale)
                 )
 

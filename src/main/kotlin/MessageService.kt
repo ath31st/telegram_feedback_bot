@@ -2,6 +2,7 @@ package sidim.doma
 
 import dev.inmo.tgbotapi.bot.TelegramBot
 import dev.inmo.tgbotapi.extensions.api.edit.text.editMessageText
+import dev.inmo.tgbotapi.extensions.api.send.copyMessage
 import dev.inmo.tgbotapi.extensions.api.send.sendTextMessage
 import dev.inmo.tgbotapi.types.IdChatIdentifier
 import dev.inmo.tgbotapi.types.MessageId
@@ -45,6 +46,28 @@ class MessageService(
         } catch (e: Exception) {
             if (e.message?.contains("403") == true) {
                 logger.error("Failed to edit message $messageId in chat $chatId: ${e.message}")
+            }
+        }
+    }
+
+    suspend fun copyMessage(
+        fromChatId: IdChatIdentifier,
+        messageId: MessageId,
+        toChatId: IdChatIdentifier,
+        replyMarkup: InlineKeyboardMarkup? = null
+    ) {
+        try {
+            bot.copyMessage(
+                toChatId = toChatId,
+                fromChatId = fromChatId,
+                messageId = messageId,
+                replyMarkup = replyMarkup
+            )
+        } catch (e: Exception) {
+            if (e.message?.contains("403") == true) {
+                logger.error(
+                    "Failed to copy message $messageId from $fromChatId to $toChatId: ${e.message}"
+                )
             }
         }
     }
