@@ -15,6 +15,7 @@ import dev.inmo.tgbotapi.types.RawChatId
 import dev.inmo.tgbotapi.types.chat.CommonUser
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
+import dev.inmo.tgbotapi.types.message.content.TextedContent
 import dev.inmo.tgbotapi.utils.RiskFeature
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -66,15 +67,32 @@ class BotController(feedbackChatId: String, private val messageService: MessageS
                 }
 
                 if (replyingUserMessage != null) {
-                    messageService.sendTextMessage(
-                        ChatId(RawChatId(userChatId)),
-                        "${
-                            getText(
-                                "message.answer_from_dev",
-                                userLocal
-                            )
-                        }\n${replyingUserMessage.text}"
-                    )
+                    val header = getText("message.answer_from_dev", userLocal)
+                    val content = replyingUserMessage.content
+                    val adminPart = (content as? TextedContent)?.text ?: ""
+
+                    val fullAnswer = if (adminPart.isNotBlank()) {
+                        "<b>$header</b>\n$adminPart"
+                    } else {
+                        "<b>$header</b>"
+                    }
+
+                    val targetChatId = ChatId(RawChatId(userChatId))
+
+                    if (content is TextContent) {
+                        messageService.sendTextMessage(
+                            targetChatId,
+                            fullAnswer
+                        )
+                    } else {
+                        messageService.copyMessage(
+                            fromChatId = feedbackChatId,
+                            messageId = replyingUserMessage.messageId,
+                            toChatId = targetChatId,
+                            text = fullAnswer
+                        )
+                    }
+
                     messageService.sendTextMessage(
                         feedbackChatId,
                         getText("message.message_delivered", replyingLocale, userChatId)

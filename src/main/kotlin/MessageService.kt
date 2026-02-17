@@ -54,6 +54,7 @@ class MessageService(
         fromChatId: IdChatIdentifier,
         messageId: MessageId,
         toChatId: IdChatIdentifier,
+        text: String? = null,
         replyMarkup: InlineKeyboardMarkup? = null
     ) {
         try {
@@ -61,7 +62,9 @@ class MessageService(
                 toChatId = toChatId,
                 fromChatId = fromChatId,
                 messageId = messageId,
-                replyMarkup = replyMarkup
+                text = text,
+                replyMarkup = replyMarkup,
+                parseMode = HTMLParseMode
             )
         } catch (e: Exception) {
             if (e.message?.contains("403") == true) {
